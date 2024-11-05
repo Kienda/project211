@@ -9,9 +9,13 @@ private:
     int y;
 
 public:
-    Point() { x = 0, y = 0; }
+    Point() : x(0), y(0) {}
 
-    void set(int x_value, int y_value) { x = x_value, y = y_value; }
+    void set(int x_value, int y_value)
+    {
+        x = x_value;
+        y = y_value;
+    }
 
     int getX() { return x; }
     int getY() { return y; }
@@ -19,54 +23,63 @@ public:
     void print() const { cout << "(" << x << ", " << y << ")" << endl; }
 };
 
+class World
+{
+private:
+    Point coins[3]; // Array of 3 Point objects representing coins
+
+public:
+    void set(int i, int x, int y)
+    {
+        if (i >= 0 && i < 3)
+        {
+            coins[i].set(x, y); // Set location for the i-th coin
+        }
+    }
+
+    void print() const
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            cout << "Coin " << (i + 1) << " is at position: ";
+            coins[i].print();
+        }
+    }
+};
+
 int main(int argc, char *argv[])
 {
+    // Check if the correct number of arguments is provided
     if (argc != 7)
     {
-        cout << "Coordinates of the coins must be between 0 to and 9 !!!" << endl;
+        cout << "Error: Please enter exactly 6 command-line arguments." << endl;
         return 1;
     }
+    // Convert arguments to integers and validate each pair of coordinates
+    int x1 = atoi(argv[1]);
+    int y1 = atoi(argv[2]);
+    int x2 = atoi(argv[3]);
+    int y2 = atoi(argv[4]);
+    int x3 = atoi(argv[5]);
+    int y3 = atoi(argv[6]);
 
-    // Create three Point objects for the three coins
-    Point coin1, coin2, coin3;
-
-    // Validate and set the coordinates for coin 1
-    int coin1X = atoi(argv[1]);
-    int coin1Y = atoi(argv[2]);
-    if (coin1X < 0 || coin1X > 9 || coin1Y < 0 || coin1Y > 9)
+    // Check if each coordinate is within the range [0, 9]
+    if ((x1 < 0 || x1 > 9 || y1 < 0 || y1 > 9) ||
+        (x2 < 0 || x2 > 9 || y2 < 0 || y2 > 9) ||
+        (x3 < 0 || x3 > 9 || y3 < 0 || y3 > 9))
     {
-        cout << "Coordinates of the coins must be between 0 to and 9 !!!" << endl;
+        cout << "Error: All coordinates must be within the range 0 to 9." << endl;
         return 1;
     }
-    coin1.set(coin1X, coin1Y);
 
-    // Validate and set the coordinates for coin 2
-    int coin2X = atoi(argv[3]);
-    int coin2Y = atoi(argv[4]);
-    if (coin2X < 0 || coin2X > 9 || coin2Y < 0 || coin2Y > 9)
-    {
-        cout << "Coordinates of the coins must be between 0 to and 9 !!!" << endl;
-        return 1;
-    }
-    coin2.set(coin2X, coin2Y);
-
-    // Validate and set the coordinates for coin 3
-    int coin3X = atoi(argv[5]);
-    int coin3Y = atoi(argv[6]);
-    if (coin3X < 0 || coin3X > 9 || coin3Y < 0 || coin3Y > 9)
-    {
-        cout << "Coordinates of the coins must be between 0 to and 9 !!!" << endl;
-        return 1;
-    }
-    coin3.set(coin3X, coin3Y);
+    // Create a World object and set the coordinates
+    World world;
+    world.set(0, x1, y1);
+    world.set(1, x2, y2);
+    world.set(2, x3, y3);
 
     // Print all the coin locations
-    cout << "Coin 1 is at position: ";
-    coin1.print();
-    cout << "Coin 2 is at position: ";
-    coin2.print();
-    cout << "Coin 3 is at: ";
-    coin3.print();
+    world.print();
 
     return 0;
 }
